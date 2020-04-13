@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
 // })
 UserSchema.methods.generateToken = function (expiresIn = '30m') {
     const userInstace = this;
-    return sign({ userId: userInstace.id }, jwtSecret, { expiresIn })
+    return sign({ userId: userInstace.id }, process.env.JWT_SECRET, { expiresIn })
 }
 
 UserSchema.pre('save', async function () {

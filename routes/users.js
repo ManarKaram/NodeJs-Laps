@@ -66,22 +66,18 @@ router.post('/login', async (req, res, next) => {
 router.get('/chat', authenticationMiddleWare, (req, res, next) => {
     res.send('User Token Verified')
 })
-router.delete('/:id', async (req, res, next) => {
-
-    const id = req.params.id;
+router.delete('/', authenticationMiddleWare, async (req, res, next) => {
+    //  const token = req.headers.authorization;
+    //const currentUser = await User.getUserFromToken(token);
+    const id = req.user.id;
     const user = await User.findByIdAndDelete(id);
     res.status(200).json(user);
 
 
-    // if (User.deleteOne({ _id: id })) {
-    //     await user.save();
-    //     res.send("Deleted Succefully")
-    // } else {
-    //     res.send("not a user")
-    // }
+
 });
 
-router.patch('/:id',
+router.patch('/', authenticationMiddleWare,
     validationMiddleWare(
         check('password')
             .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
@@ -90,8 +86,7 @@ router.patch('/:id',
             .isEmail().withMessage('Password must be an email')
     ),
     async (req, res, next) => {
-
-        const id = req.params.id;
+        const id = req.user.id;
         const { username, password, firstName, age } = req.body;
         const user = await User.findByIdAndUpdate(id, {
             username, password, firstName, age
