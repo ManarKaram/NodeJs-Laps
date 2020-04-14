@@ -9,10 +9,7 @@ const authenticationMiddleWare = require('../middlewares/authentication')
 router.get('/', async (req, res, next) => {
     try {
         const users = await User.find({})
-        // users.map(user => {
 
-        //     res.json(user.firstName);
-        // })
         res.json(users)
     }
     catch (err) {
@@ -26,9 +23,8 @@ router.post('/register',
     validationMiddleWare(
         check('password')
             .isLength({ min: 5 }).withMessage('must be at least 5 chars long')
-            .matches(/\d/).withMessage('must contain a number'),
-        check('username').isLength({ min: 5 }).withMessage('must be at least 5 chars long')
-            .isEmail().withMessage('Password must be an email')
+            .matches(/\d/).withMessage('must contain a number')
+
     ),
 
     async (req, res, next) => {
